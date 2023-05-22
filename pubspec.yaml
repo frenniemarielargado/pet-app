@@ -34,6 +34,9 @@ dependencies:
   fluttertoast: ^8.2.1
   firebase_core: ^2.11.0
   firebase_auth: ^4.5.0
+  intl: ^0.18.0
+
+
 
 
 
@@ -65,7 +68,23 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/splash_screen/logo.png
+    - assets/images/cam_icon.png
+    - assets/images/edit_profile.png
+    - assets/images/events_icon.png
+    - assets/images/feeder_icon.png
+    - assets/images/home_1.png
+    - assets/images/logo.png
+    - assets/images/menu.png
+    - assets/images/next.png
+    - assets/images/pet_pic.png
+    - assets/images/user.jpg
+    - assets/images/categories/deworming.png
+    - assets/images/categories/vaccination.png
+    - assets/images/categories/vetVisit.png
+    - assets/images/categories/grooming.png
+    - assets/images/categories/medication.png
+    - assets/images/categories/others.png
+    - assets/images/categories/ticksAndFleas.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

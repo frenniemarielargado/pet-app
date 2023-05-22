@@ -1,5 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:thesis_app/home/home_screen.dart';
 import 'package:thesis_app/user/login.dart';
+
+import '../model/user_model.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -9,6 +15,10 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final _auth = FirebaseAuth.instance;
+
+  // string for displaying the error Message
+  String? errorMessage;
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nameEditingController = TextEditingController();
@@ -23,12 +33,16 @@ class _SignUpPageState extends State<SignUpPage> {
     final nameField = TextFormField(
       autofocus: false,
       controller: nameEditingController,
+      validator: (value) {
+          if (value!.isEmpty) {
+            return 'Please enter your name';
+          }
+          return null;
+    },
       keyboardType: TextInputType.name,
-
       onSaved: (value)
       {
         nameEditingController.text = value!;
-
       },
       textInputAction: TextInputAction.next,
       decoration: const InputDecoration(
@@ -47,7 +61,15 @@ class _SignUpPageState extends State<SignUpPage> {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
             borderSide: BorderSide(color: Color(0xFF5A2BAF), width: 1,),
-          )
+          ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(color: Colors.red, width: 1),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(color: Colors.red, width: 1),
+        ),
       ),
     );
 
@@ -55,6 +77,18 @@ class _SignUpPageState extends State<SignUpPage> {
     final emailField = TextFormField(
       autofocus: false,
       controller: emailEditingController,
+      validator: (value)
+      {
+        if(value!.isEmpty) {
+          return ('Please enter your email');
+        }
+        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value))
+        {
+          return ('Please enter a valid email ');
+        }
+        return null;
+      },
+
       keyboardType: TextInputType.emailAddress,
 
       onSaved: (value)
@@ -79,7 +113,15 @@ class _SignUpPageState extends State<SignUpPage> {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
             borderSide: BorderSide(color: Color(0xFF5A2BAF), width: 1,),
-          )
+          ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(color: Colors.red, width: 1),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(color: Colors.red, width: 1),
+        ),
       ),
     );
 
@@ -89,6 +131,17 @@ class _SignUpPageState extends State<SignUpPage> {
       autofocus: false,
       obscureText: true,
       controller: passwordEditingController,
+      validator: (value) {
+        RegExp regex = RegExp(r'^.{6,}$');
+        if (value!.isEmpty) {
+          return ("Password is required for login");
+        }
+        if(!regex.hasMatch(value))
+        {
+          return("Enter a valid password, minimum of 6 characters");
+        }
+        return null;
+      },
       onSaved: (value)
       {
         passwordEditingController.text = value!;
@@ -110,7 +163,15 @@ class _SignUpPageState extends State<SignUpPage> {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
             borderSide: BorderSide(color: Color(0xFF5A2BAF),  width: 1,),
-          )
+          ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(color: Colors.red, width: 1),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(color: Colors.red, width: 1),
+        ),
       ),
     );
 
@@ -119,6 +180,15 @@ class _SignUpPageState extends State<SignUpPage> {
       autofocus: false,
       obscureText: true,
       controller: confirmPasswordEditingController,
+      validator: (value){
+        if(confirmPasswordEditingController.text != passwordEditingController.text)
+          {
+            return "Password don't match";
+          }
+        {
+          return null;
+        }
+      },
       onSaved: (value)
       {
         confirmPasswordEditingController.text = value!;
@@ -140,7 +210,15 @@ class _SignUpPageState extends State<SignUpPage> {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
             borderSide: BorderSide(color: Color(0xFF5A2BAF),  width: 1,),
-          )
+          ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(color: Colors.red, width: 1),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(color: Colors.red, width: 1),
+        ),
       ),
     );
 
@@ -152,7 +230,7 @@ class _SignUpPageState extends State<SignUpPage> {
         child: MaterialButton(
           minWidth: 250,
           onPressed: () {
-
+            signUp(emailEditingController.text, passwordEditingController.text);
           },
 
           child: const Text('Sign Up', style: TextStyle(
@@ -233,5 +311,68 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+  void signUp(String email, String password) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await _auth
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((value) => {postDetailsToFirestore()})
+            .catchError((e) {
+          Fluttertoast.showToast(msg: e!.message);
+        });
+      } on FirebaseAuthException catch (error) {
+        switch (error.code) {
+          case "invalid-email":
+            errorMessage = "Your email address appears to be invalid.";
+            break;
+          case "wrong-password":
+            errorMessage = "Your password is wrong.";
+            break;
+          case "user-not-found":
+            errorMessage = "User with this email doesn't exist.";
+            break;
+          case "user-disabled":
+            errorMessage = "User with this email has been disabled.";
+            break;
+          case "too-many-requests":
+            errorMessage = "Too many requests";
+            break;
+          case "operation-not-allowed":
+            errorMessage = "Signing in with Email and Password is not enabled.";
+            break;
+          default:
+            errorMessage = "An undefined Error happened.";
+        }
+        Fluttertoast.showToast(msg: errorMessage!);
+        (error.code);
+      }
+    }
+  }
+  postDetailsToFirestore() async {
+    // calling our firestore
+    // calling our user model
+    // sending these values
+
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = _auth.currentUser;
+
+    UserModel userModel = UserModel();
+
+    // writing all the values
+    userModel.email = user!.email;
+    userModel.uid = user.uid;
+    userModel.name = nameEditingController.text;
+
+    await firebaseFirestore
+        .collection("users")
+        .doc(user.uid)
+        .set(userModel.toMap());
+    Fluttertoast.showToast(msg: "Account created successfully :) ");
+
+    Navigator.pushAndRemoveUntil(
+        (context),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+            (route) => false);
   }
 }
