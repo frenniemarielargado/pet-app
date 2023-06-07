@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "1015475379767",
-    "project_id": "auth-15584",
-    "storage_bucket": "auth-15584.appspot.com"
+    "project_number": "568229248748",
+    "project_id": "petappauthentication",
+    "storage_bucket": "petappauthentication.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1015475379767:android:3096a76cdc96077ef1e9b2",
+        "mobilesdk_app_id": "1:568229248748:android:8c1864b77a59c7ec43efc9",
         "android_client_info": {
           "package_name": "com.example.thesis_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1015475379767-7guj7d19inhsr2f636371fhau3a157l8.apps.googleusercontent.com",
+          "client_id": "568229248748-d389lh8lj89q8qrmn945atgqmqnatnja.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDDzKAuLWniaayX-c-IMOydVZiq6klD6Uo"
+          "current_key": "AIzaSyCuPBt0D0Plh9GByzG1gup0I6_Rqy5e7aA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1015475379767-7guj7d19inhsr2f636371fhau3a157l8.apps.googleusercontent.com",
+              "client_id": "568229248748-d389lh8lj89q8qrmn945atgqmqnatnja.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

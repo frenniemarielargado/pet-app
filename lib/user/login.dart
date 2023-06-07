@@ -12,7 +12,10 @@ class LogInPage extends StatefulWidget {
 }
 
 class _LogInPageState extends State<LogInPage> {
+  //password Visibility
+  bool _isPasswordVisible = false;
 
+  //form
   final _formKey = GlobalKey<FormState>();
 
   //editing controller
@@ -29,6 +32,8 @@ class _LogInPageState extends State<LogInPage> {
 
   @override
   Widget build(BuildContext context) {
+
+
     //email field
     final emailField = TextFormField(
       autofocus: false,
@@ -82,7 +87,7 @@ class _LogInPageState extends State<LogInPage> {
     //password field
     final passwordField = TextFormField(
       autofocus: false,
-      obscureText: true,
+      obscureText: !_isPasswordVisible,
       controller: passwordEditingController,
       validator: (value) {
         RegExp regex = RegExp(r'^.{6,}$');
@@ -100,33 +105,44 @@ class _LogInPageState extends State<LogInPage> {
         passwordEditingController.text = value!;
       },
       textInputAction: TextInputAction.done,
-      decoration: const InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
+      decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
           hintText: 'Password',
-          hintStyle: TextStyle(
+
+          hintStyle: const TextStyle(
             fontSize: 17.0,
             fontFamily: 'Poppins',
             color: Colors.grey,
           ),
 
           fillColor: Colors.white,
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
             borderSide: BorderSide(color: Color(0xFF5A2BAF),  width: 1),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
             borderSide: BorderSide(color: Color(0xFF5A2BAF),  width: 1),
           ),
-          errorBorder: OutlineInputBorder(
+          errorBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           borderSide: BorderSide(color: Colors.red, width: 1),
           ),
-          focusedErrorBorder: OutlineInputBorder(
+          focusedErrorBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           borderSide: BorderSide(color: Colors.red, width: 1),
           ),
-
+        suffixIcon: GestureDetector(
+          onTap: () {
+            setState(() {
+              _isPasswordVisible = !_isPasswordVisible;
+            });
+          },
+          child: Icon(
+            _isPasswordVisible ? Icons.visibility_rounded: Icons.visibility_off_rounded,
+            color: Colors.grey,
+          ),
+        ),
       ),
     );
 

@@ -35,8 +35,7 @@ dependencies:
   firebase_core: ^2.11.0
   firebase_auth: ^4.5.0
   intl: ^0.18.0
-
-
+  day_picker: ^2.2.0
 
 
 
@@ -47,6 +46,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -73,7 +73,7 @@ flutter:
     - assets/images/events_icon.png
     - assets/images/feeder_icon.png
     - assets/images/home_1.png
-    - assets/images/logo.png
+    - assets/images/app_icon.png
     - assets/images/menu.png
     - assets/images/next.png
     - assets/images/pet_pic.png
@@ -85,6 +85,9 @@ flutter:
     - assets/images/categories/medication.png
     - assets/images/categories/others.png
     - assets/images/categories/ticksAndFleas.png
+    - assets/images/petFeeder_background.png
+    - assets/images/schedule.png
+    - assets/images/feedNow.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

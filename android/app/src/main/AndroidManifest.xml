@@ -3,9 +3,9 @@
     package="com.example.thesis_app"
     tools:ignore="MissingVersion">
    <application
-        android:label="thesis_app"
+        android:label="Pet App"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"

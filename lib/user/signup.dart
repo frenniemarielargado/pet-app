@@ -15,6 +15,11 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  //password Visibility
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
+
+  //firebase
   final _auth = FirebaseAuth.instance;
 
   // string for displaying the error Message
@@ -129,7 +134,7 @@ class _SignUpPageState extends State<SignUpPage> {
     //password field
     final passwordField = TextFormField(
       autofocus: false,
-      obscureText: true,
+      obscureText: !_isPasswordVisible,
       controller: passwordEditingController,
       validator: (value) {
         RegExp regex = RegExp(r'^.{6,}$');
@@ -147,30 +152,41 @@ class _SignUpPageState extends State<SignUpPage> {
         passwordEditingController.text = value!;
       },
       textInputAction: TextInputAction.next,
-      decoration: const InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
+      decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
           hintText: 'Password',
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
             fontSize: 17.0,
             fontFamily: 'Poppins',
             color: Colors.grey,
           ),
           fillColor: Colors.white,
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
             borderSide: BorderSide(color: Color(0xFF5A2BAF),  width: 1,),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
             borderSide: BorderSide(color: Color(0xFF5A2BAF),  width: 1,),
           ),
-        errorBorder: OutlineInputBorder(
+        errorBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           borderSide: BorderSide(color: Colors.red, width: 1),
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           borderSide: BorderSide(color: Colors.red, width: 1),
+        ),
+        suffixIcon: GestureDetector(
+          onTap: () {
+            setState(() {
+              _isPasswordVisible = !_isPasswordVisible;
+            });
+          },
+          child: Icon(
+            _isPasswordVisible ? Icons.visibility_rounded: Icons.visibility_off_rounded,
+            color: Colors.grey,
+          ),
         ),
       ),
     );
@@ -178,7 +194,7 @@ class _SignUpPageState extends State<SignUpPage> {
     //confirm password field
     final confirmPasswordField = TextFormField(
       autofocus: false,
-      obscureText: true,
+      obscureText: !_isConfirmPasswordVisible,
       controller: confirmPasswordEditingController,
       validator: (value){
         if(confirmPasswordEditingController.text != passwordEditingController.text)
@@ -194,30 +210,41 @@ class _SignUpPageState extends State<SignUpPage> {
         confirmPasswordEditingController.text = value!;
       },
       textInputAction: TextInputAction.done,
-      decoration: const InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
+      decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
           hintText: 'Confirm Password',
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
             fontSize: 17.0,
             fontFamily: 'Poppins',
             color: Colors.grey,
           ),
           fillColor: Colors.white,
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
             borderSide: BorderSide(color: Color(0xFF5A2BAF),  width: 1,),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
             borderSide: BorderSide(color: Color(0xFF5A2BAF),  width: 1,),
           ),
-        errorBorder: OutlineInputBorder(
+        errorBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           borderSide: BorderSide(color: Colors.red, width: 1),
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           borderSide: BorderSide(color: Colors.red, width: 1),
+        ),
+        suffixIcon: GestureDetector(
+          onTap: () {
+            setState(() {
+              _isConfirmPasswordVisible= !_isConfirmPasswordVisible;
+            });
+          },
+          child: Icon(
+            _isConfirmPasswordVisible ? Icons.visibility_rounded: Icons.visibility_off_rounded,
+            color: Colors.grey,
+          ),
         ),
       ),
     );
@@ -368,7 +395,7 @@ class _SignUpPageState extends State<SignUpPage> {
         .collection("users")
         .doc(user.uid)
         .set(userModel.toMap());
-    Fluttertoast.showToast(msg: "Account created successfully :) ");
+    Fluttertoast.showToast(msg: "Account created successfully");
 
     Navigator.pushAndRemoveUntil(
         (context),
